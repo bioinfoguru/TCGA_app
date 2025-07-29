@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Codon Game App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        header {
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .title-part {
+            font-size: 1em;
+        }
+
+        .title-button {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0px 5px;
+            margin-right: -10px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: default;
+        }
+
+        .score-board {
+            display: flex;
+            gap: 30px;
+            font-size: 1.2em;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-value {
+            font-weight: bold;
+            font-size: 1.3em;
+            color: #ffd700;
+        }
+
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .game-area {
+            height: 400px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .amino-acid {
+            position: absolute;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s;
+            cursor: pointer;
+        }
+
+        .amino-acid:hover {
+            transform: scale(1.05);
+        }
+
+        .burst {
+            animation: burst 0.5s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .input-display {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 10px;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .key {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .key:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .key:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .clear-btn {
+            grid-column: 2 / 4;
+            width: 160px;
+            height: 80px;
+            font-size: 1.5em;
+        }
+
+        .game-over {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        .game-over h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .game-over p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .hint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.1em;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd700;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @keyframes particle {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            <span class="title-button">T</span>
+			<span class="title-part">he</span>
+            <span class="title-button">C</span>
+            <span class="title-part">odon</span>
+            <span class="title-button">G</span>
+            <span class="title-part">ame</span>
+            <span class="title-button">A</span>
+            <span class="title-part">pp</span>
+        </h1>
+        <div class="score-board">
+            <div class="score-item">
+                <span>Score:</span>
+                <span class="score-value" id="score">0</span>
+            </div>
+            <div class="score-item">
+                <span>Speed:</span>
+                <span class="score-value" id="speed">1.0x</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="game-area" id="gameArea">
+            <div class="hint" id="hint">Type the codon!</div>
+            <div class="input-display" id="inputDisplay">---</div>
+        </section>
+
+        <section class="keypad">
+            <button class="key" data-key="A">A</button>
+            <button class="key" data-key="C">C</button>
+            <button class="key" data-key="G">G</button>
+            <button class="key" data-key="T">T</button>
+            <button class="key clear-btn" id="clearBtn">Clear</button>
+        </section>
+    </main>
+
+    <div class="game-over" id="gameOver">
+        <h2>Game Over!</h2>
+        <p>Final Score: <span id="finalScore">0</span></p>
+        <button class="restart-btn" onclick="restartGame()">Play Again</button>
+    </div>
+
+    <script>
+        // Audio context for popping sound
+        let audioContext = null;
+        
+        // Initialize audio on first user interaction
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioContext;
+        }
+        
+        // Play popping sound
+        function playPopSound() {
+            try {
+                const audioContext = initAudio();
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
+                // Create oscillator for pop sound
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Set oscillator type and frequency
+                oscillator.type = 'sine';
+                oscillator.frequency.value = 300;
+                
+                // Create a quick pop effect
+                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                // Start and stop the oscillator
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                console.log('Audio playback failed:', e);
+            }
+        }
+
+        // Amino acid to codon mapping
+        const aminoAcidCodons = {
+            'Alanine': ['GCT', 'GCC', 'GCA', 'GCG'],
+            'Arginine': ['CGT', 'CGC', 'CGA', 'CGG', 'AGA', 'AGG'],
+            'Asparagine': ['AAT', 'AAC'],
+            'Aspartic acid': ['GAT', 'GAC'],
+            'Cysteine': ['TGT', 'TGC'],
+            'Glutamic acid': ['GAA', 'GAG'],
+            'Glutamine': ['CAA', 'CAG'],
+            'Glycine': ['GGT', 'GGC', 'GGA', 'GGG'],
+            'Histidine': ['CAT', 'CAC'],
+            'Isoleucine': ['ATT', 'ATC', 'ATA'],
+            'Leucine': ['TTA', 'TTG', 'CTT', 'CTC', 'CTA', 'CTG'],
+            'Lysine': ['AAA', 'AAG'],
+            'Methionine': ['ATG'],
+            'Phenylalanine': ['TTT', 'TTC'],
+            'Proline': ['CCT', 'CCC', 'CCA', 'CCG'],
+            'Serine': ['TCT', 'TCC', 'TCA', 'TCG', 'AGT', 'AGC'],
+            'Threonine': ['ACT', 'ACC', 'ACA', 'ACG'],
+            'Tryptophan': ['TGG'],
+            'Tyrosine': ['TAT', 'TAC'],
+            'Valine': ['GTT', 'GTC', 'GTA', 'GTG'],
+            'Stop': ['TAA', 'TAG', 'TGA']
+        };
+
+        // Game state
+        let score = 0;
+        let combo = 0;
+        let speed = 1;
+        let currentAminoAcid = null;
+        let correctCodon = '';
+        let currentCodon = '';
+        let gameRunning = true;
+        let fallingInterval = null;
+        let aminoAcidElement = null;
+        let isBursting = false; // Flag to prevent multiple bursts
+
+        // DOM elements
+        const gameArea = document.getElementById('gameArea');
+        const inputDisplay = document.getElementById('inputDisplay');
+        const scoreElement = document.getElementById('score');
+        const comboElement = document.getElementById('combo');
+        const speedElement = document.getElementById('speed');
+        const hintElement = document.getElementById('hint');
+        const gameOverScreen = document.getElementById('gameOver');
+        const finalScoreElement = document.getElementById('finalScore');
+
+        // Initialize game
+        function startGame() {
+            // Clear codon at start
+            currentCodon = '';
+            updateInputDisplay();
+            
+            spawnNewAminoAcid();
+            startFalling();
+        }
+
+        // Spawn new amino acid
+        function spawnNewAminoAcid() {
+            // Clear any existing falling interval
+            if (fallingInterval) {
+                clearInterval(fallingInterval);
+                fallingInterval = null;
+            }
+            
+            const aminoAcids = Object.keys(aminoAcidCodons);
+            currentAminoAcid = aminoAcids[Math.floor(Math.random() * aminoAcids.length)];
+            const codons = aminoAcidCodons[currentAminoAcid];
+            correctCodon = codons[Math.floor(Math.random() * codons.length)];
+            
+            if (aminoAcidElement) {
+                aminoAcidElement.remove();
+            }
+            
+            aminoAcidElement = document.createElement('div');
+            aminoAcidElement.className = 'amino-acid';
+            aminoAcidElement.textContent = currentAminoAcid;
+            aminoAcidElement.style.left = Math.random() * (gameArea.offsetWidth - 150) + 'px';
+            aminoAcidElement.style.top = '0px';
+            gameArea.appendChild(aminoAcidElement);
+            
+            hintElement.textContent = `Type the codon for ${currentAminoAcid}`;
+            
+            // Reset burst flag
+            isBursting = false;
+        }
+
+        // Start falling animation
+        function startFalling() {
+            let position = 0;
+            fallingInterval = setInterval(() => {
+                if (!gameRunning || !aminoAcidElement || isBursting) return;
+                
+                position += 2 * speed;
+                aminoAcidElement.style.top = position + 'px';
+                
+                if (position > gameArea.offsetHeight - 60) {
+                    gameOver();
+                }
+            }, 50);
+        }
+
+        // Handle key press
+        document.querySelectorAll('.key[data-key]').forEach(key => {
+            key.addEventListener('click', () => {
+                if (currentCodon.length < 3 && !isBursting) {
+                    currentCodon += key.dataset.key;
+                    updateInputDisplay();
+                    
+                    // Auto-submit when third base is entered
+                    if (currentCodon.length === 3) {
+                        setTimeout(checkAnswer, 100);
+                    }
+                }
+            });
+        });
+
+        // Clear button
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            if (!isBursting) {
+                currentCodon = '';
+                updateInputDisplay();
+            }
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning || isBursting) return;
+            
+            if (['A', 'C', 'G', 'T'].includes(e.key.toUpperCase())) {
+                if (currentCodon.length < 3) {
+                    currentCodon += e.key.toUpperCase();
+                    updateInputDisplay();
+                    
+                    // Auto-submit when third base is entered
+                    if (currentCodon.length === 3) {
+                        setTimeout(checkAnswer, 100);
+                    }
+                }
+            } else if (e.key === 'Backspace') {
+                currentCodon = '';
+                updateInputDisplay();
+            } else if (e.key === 'Escape') {
+                currentCodon = '';
+                updateInputDisplay();
+            }
+        });
+
+        // Update input display
+        function updateInputDisplay() {
+            let display = currentCodon;
+            while (display.length < 3) {
+                display += '-';
+            }
+            inputDisplay.textContent = display;
+        }
+
+        // Check answer
+        function checkAnswer() {
+            if (currentCodon.length !== 3 || isBursting) return;
+            
+            // Check if the entered codon is in the list of valid codons for the current amino acid
+            if (aminoAcidCodons[currentAminoAcid].includes(currentCodon)) {
+                // Correct answer
+                combo++;
+                score += 10 * combo;
+                isBursting = true; // Set burst flag to prevent multiple bursts
+                updateScore();
+                
+                // Increase speed every 5 correct answers
+                if (combo % 5 === 0) {
+                    speed += 0.2;
+                    speedElement.textContent = speed.toFixed(1) + 'x';
+                }
+                
+                // Clear the falling interval
+                clearInterval(fallingInterval);
+                fallingInterval = null;
+                
+                // Create burst effect
+                createBurstEffect();
+                
+                // Spawn new amino acid after burst animation completes
+                setTimeout(() => {
+                    spawnNewAminoAcid();
+                    currentCodon = '';
+                    updateInputDisplay();
+                    startFalling();
+                }, 600);
+            } else {
+                // Wrong answer - clear the codon
+                combo = 0;
+                updateScore();
+                inputDisplay.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    inputDisplay.style.animation = '';
+                    currentCodon = '';
+                    updateInputDisplay();
+                }, 500);
+            }
+        }
+
+        // Create burst effect with sound
+        function createBurstEffect() {
+            if (!aminoAcidElement) return;
+            
+            aminoAcidElement.classList.add('burst');
+            
+            // Play popping sound
+            playPopSound();
+            
+            // Create particles
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = aminoAcidElement.offsetLeft + 50 + 'px';
+                particle.style.top = aminoAcidElement.offsetTop + 25 + 'px';
+                particle.style.setProperty('--x', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.setProperty('--y', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.animation = 'particle 0.5s ease-out forwards';
+                gameArea.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 500);
+            }
+        }
+
+        // Update score display
+        function updateScore() {
+            scoreElement.textContent = score;
+        }
+
+        // Game over - clear the codon
+        function gameOver() {
+            gameRunning = false;
+            clearInterval(fallingInterval);
+            fallingInterval = null;
+            currentCodon = '';
+            updateInputDisplay();
+            finalScoreElement.textContent = score;
+            gameOverScreen.style.display = 'block';
+        }
+
+        // Restart game - clear the codon
+        function restartGame() {
+            score = 0;
+            combo = 0;
+            speed = 1;
+            currentCodon = '';
+            gameRunning = true;
+            isBursting = false;
+            updateScore();
+            speedElement.textContent = '1.0x';
+            gameOverScreen.style.display = 'none';
+            updateInputDisplay();
+            spawnNewAminoAcid();
+            startFalling();
+        }
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize the game when the page loads
+        window.addEventListener('load', startGame);
+        
+        // Initialize audio on first user interaction
+        document.addEventListener('click', initAudio, { once: true });
+        document.addEventListener('keydown', initAudio, { once: true });
+    </script>
+</body>
+</html>
