@@ -27,6 +27,21 @@
             background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
             flex-shrink: 0;
+            /* display: flex; */
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-container {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+        }
+        .logo-container svg {
+            width: 100%;
+            height: 100%;
         }
         h1 {
             font-size: 1.8em;
@@ -37,9 +52,11 @@
             justify-content: center;
             gap: 5px;
             flex-wrap: wrap;
+            padding-left: 50px; /* Add space for the logo */
         }
         .title-part {
             font-size: 0.8em;
+            margin-right: 5px;
         }
         .title-button {
             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
@@ -274,14 +291,15 @@
             justify-content: center;
             width: 25px;
             height: 25px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 50%;
-            color: rgba(0, 0, 0, 0.5);
+            color: #9c51e0;
             font-size: 0.9em;
             transition: all 0.3s ease;
         }
         .social-icon:hover {
             background: rgba(255, 255, 255, 0.3);
+			font-size: 1.1em;
             transform: translateY(-3px);
         }
         
@@ -300,6 +318,10 @@
             }
             h1 {
                 font-size: 1.6em;
+            }
+            .logo-container {
+                width: 35px;
+                height: 35px;
             }
             footer {
                 padding: 6px;
@@ -357,6 +379,10 @@
                 height: 22px;
                 font-size: 0.8em;
             }
+            .logo-container {
+                width: 30px;
+                height: 30px;
+            }
         }
         
         @media (max-height: 600px) {
@@ -404,6 +430,10 @@
                 height: 22px;
                 font-size: 0.8em;
             }
+            .logo-container {
+                width: 30px;
+                height: 30px;
+            }
         }
         
         @media (max-height: 500px) {
@@ -439,6 +469,10 @@
             .hint {
                 font-size: 0.7em;
                 padding: 3px 6px;
+            }
+            .logo-container {
+                width: 25px;
+                height: 25px;
             }
         }
         
@@ -483,11 +517,51 @@
             .score-value {
                 font-size: 1em;
             }
+            .logo-container {
+                width: 20px;
+                height: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
+        <div class="logo-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 476 712">
+              <path id="bg_logo"
+                    fill="#9c51e0" stroke="none" stroke-width="0"
+                    d="M 0.00,0.00
+                       C 0.00,0.00 130.00,0.00 130.00,0.00
+                         130.00,0.00 168.00,0.00 168.00,0.00
+                         168.00,0.00 186.00,1.00 186.00,1.00
+                         186.00,1.00 152.00,17.75 152.00,17.75
+                         152.00,17.75 92.00,47.75 92.00,47.75
+                         92.00,47.75 72.00,57.75 72.00,57.75
+                         72.00,57.75 64.02,63.21 64.02,63.21
+                         64.02,63.21 63.00,71.00 63.00,71.00
+                         63.00,71.00 63.00,649.00 63.00,649.00
+                         63.00,649.00 413.00,649.00 413.00,649.00
+                         413.00,649.00 413.00,359.00 413.00,359.00
+                         413.00,359.00 298.00,397.33 298.00,397.33
+                         298.00,397.33 262.00,409.33 262.00,409.33
+                         262.00,409.33 240.00,416.00 240.00,416.00
+                         240.00,416.00 240.00,471.00 240.00,471.00
+                         240.00,471.00 313.00,452.63 313.00,452.63
+                         313.00,452.63 358.00,442.00 358.00,442.00
+                         358.00,442.00 358.00,594.00 358.00,594.00
+                         358.00,594.00 118.00,594.00 118.00,594.00
+                         118.00,594.00 118.00,294.00 118.00,294.00
+                         118.00,294.00 320.00,334.40 320.00,334.40
+                         320.00,334.40 382.00,346.80 382.00,346.80
+                         382.00,346.80 417.00,353.00 417.00,353.00
+                         417.00,353.00 431.59,441.00 431.59,441.00
+                         431.59,441.00 458.41,602.00 458.41,602.00
+                         458.41,602.00 470.25,673.00 470.25,673.00
+                         470.25,673.00 476.00,712.00 476.00,712.00
+                         476.00,712.00 0.00,712.00 0.00,712.00
+                         0.00,712.00 0.00,0.00 0.00,0.00 Z" />
+            </svg>
+        </div>
         <h1>
             <span class="title-button">T</span>
             <span class="title-part">he</span>
@@ -782,7 +856,7 @@
             
             gameArea.appendChild(aminoAcidElement);
             
-            hintElement.textContent = `Type the RNA codon for ${currentAminoAcid}`;
+            hintElement.textContent = `Type the codon for ${currentAminoAcid}`;
             
             // Start falling with adjusted speed
             const adjustedSpeed = adjustSpeedBasedOnGameArea();
