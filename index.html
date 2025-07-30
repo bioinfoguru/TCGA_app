@@ -4,115 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Codon Game App</title>
+    <script src="https://kit.fontawesome.com/578801937d.js" crossorigin="anonymous"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
             color: white;
             overflow: hidden;
         }
-
         header {
-            padding: 20px;
+            padding: 10px;
             text-align: center;
             width: 100%;
             background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
+            flex-shrink: 0;
         }
-
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 1.8em;
+            margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 5px;
+            flex-wrap: wrap;
         }
-
         .title-part {
-            font-size: 1em;
+            font-size: 0.8em;
         }
-
         .title-button {
             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             border: none;
-            border-radius: 10px;
-            padding: 0px 5px;
-            margin-right: -10px;
-            font-size: 1em;
+            border-radius: 8px;
+            padding: 0px 3px;
+            margin-right: -5px;
+            font-size: 0.8em;
             font-weight: bold;
             color: #333;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             cursor: default;
         }
-
         .score-board {
             display: flex;
-            gap: 30px;
-            font-size: 1.2em;
+            gap: 15px;
+            font-size: 0.9em;
+            float: right;
+            margin-top: 5px;
         }
-
         .score-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 5px;
         }
-
         .score-value {
             font-weight: bold;
-            font-size: 1.3em;
+            font-size: 1.1em;
             color: #ffd700;
         }
-
         main {
             flex: 1;
+            display: flex;
+            flex-direction: column;
             width: 100%;
             max-width: 800px;
-            position: relative;
-            margin: 20px auto;
+            margin: 0 auto;
+            padding: 5px;
+            overflow: hidden;
         }
-
         .game-area {
-            height: 400px;
+            flex: 1;
             position: relative;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            border-radius: 15px;
             backdrop-filter: blur(5px);
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 10px;
+            min-height: 40vh;
+            width: 100%;
         }
-
         .amino-acid {
             position: absolute;
-            padding: 15px 25px;
+            padding: 10px 15px;
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 50px;
-            font-size: 1.5em;
+            border-radius: 30px;
+            font-size: 1.2em;
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
             transition: transform 0.1s;
             cursor: pointer;
+            white-space: nowrap;
         }
-
         .amino-acid:hover {
             transform: scale(1.05);
         }
-
         .burst {
             animation: burst 0.5s ease-out forwards;
         }
-
         @keyframes burst {
             0% {
                 transform: scale(1);
@@ -127,131 +124,118 @@
                 opacity: 0;
             }
         }
-
         .input-display {
             position: absolute;
-            bottom: 20px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.7);
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 2em;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.5em;
             font-weight: bold;
-            letter-spacing: 10px;
-            min-width: 200px;
+            letter-spacing: 8px;
+            min-width: 150px;
             text-align: center;
         }
-
         .keypad {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 15px;
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 20px;
+            grid-template-rows: auto auto;
+            gap: 8px;
+            padding: 8px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
         }
-
         .key {
             background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             border: none;
-            border-radius: 15px;
-            padding: 20px;
-            font-size: 2em;
+            border-radius: 10px;
+            font-size: 1.5em;
             font-weight: bold;
             color: #333;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 80px;
-            height: 80px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            aspect-ratio: 1;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
         .key:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-
         .key:active {
             transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
-
         .key:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
-
         .clear-btn {
             grid-column: 2 / 4;
-            width: 160px;
-            height: 80px;
-            font-size: 1.5em;
+            aspect-ratio: 2/1;
+            font-size: 1em;
         }
-
         .game-over {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: rgba(0, 0, 0, 0.9);
-            padding: 40px;
-            border-radius: 20px;
+            padding: 30px;
+            border-radius: 15px;
             text-align: center;
             display: none;
             z-index: 1000;
+            width: 90%;
+            max-width: 350px;
         }
-
         .game-over h2 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
+            font-size: 2em;
+            margin-bottom: 15px;
             color: #ff6b6b;
         }
-
         .game-over p {
-            font-size: 1.5em;
-            margin-bottom: 30px;
+            font-size: 1.3em;
+            margin-bottom: 20px;
         }
-
         .restart-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2em;
+            padding: 12px 30px;
+            font-size: 1.1em;
             color: white;
-            border-radius: 30px;
+            border-radius: 25px;
             cursor: pointer;
             transition: transform 0.2s;
         }
-
         .restart-btn:hover {
             transform: scale(1.05);
         }
-
         .hint {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 1.1em;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            max-width: 70%;
+            text-align: right;
         }
-
         .particle {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: #ffd700;
             border-radius: 50%;
             pointer-events: none;
         }
-
         @keyframes particle {
             0% {
                 transform: translate(0, 0) scale(1);
@@ -262,13 +246,221 @@
                 opacity: 0;
             }
         }
+        
+        footer {
+            padding: 8px;
+            text-align: center;
+            width: 100%;
+//            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            flex-shrink: 0;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        .social-icons a {
+            text-decoration: none;
+        }
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+                gap: 3px;
+            }
+            .title-button {
+                margin-right: -3px;
+            }
+            .score-board {
+                font-size: 0.8em;
+                gap: 10px;
+            }
+            .game-area {
+                min-height: 40vh;
+            }
+            .amino-acid {
+                font-size: 1em;
+                padding: 8px 12px;
+            }
+            .input-display {
+                font-size: 1.3em;
+                letter-spacing: 6px;
+                padding: 8px 15px;
+                min-width: 120px;
+            }
+            .key {
+                font-size: 1.3em;
+            }
+            .clear-btn {
+                font-size: 0.9em;
+            }
+            .hint {
+                font-size: 0.8em;
+                padding: 4px 8px;
+            }
+            .game-over {
+                padding: 25px;
+            }
+            .game-over h2 {
+                font-size: 1.8em;
+            }
+            .game-over p {
+                font-size: 1.2em;
+            }
+            .social-icon {
+                width: 22px;
+                height: 22px;
+                font-size: 0.8em;
+            }
+        }
+        
+        @media (max-height: 600px) {
+            header {
+                padding: 8px;
+            }
+            h1 {
+                font-size: 1.6em;
+                margin-bottom: 3px;
+            }
+            .score-board {
+                font-size: 0.8em;
+                gap: 10px;
+            }
+            .game-area {
+                min-height: 40vh;
+            }
+            .input-display {
+                font-size: 1.3em;
+                letter-spacing: 6px;
+                padding: 6px 12px;
+                bottom: 8px;
+            }
+            .keypad {
+                gap: 6px;
+                padding: 6px;
+            }
+            .key {
+                font-size: 1.3em;
+            }
+            .clear-btn {
+                font-size: 1em;
+            }
+            .hint {
+                font-size: 0.8em;
+                padding: 4px 8px;
+            }
+            footer {
+                padding: 6px;
+            }
+            .social-icon {
+                width: 22px;
+                height: 22px;
+                font-size: 0.8em;
+            }
+        }
+        
+        @media (max-height: 500px) {
+            h1 {
+                font-size: 1.4em;
+            }
+            .title-button {
+                margin-right: -2px;
+            }
+            .game-area {
+                min-height: 35vh;
+            }
+            .keypad {
+                gap: 5px;
+                padding: 5px;
+            }
+            .key {
+                font-size: 1.2em;
+            }
+            .clear-btn {
+                font-size: 0.9em;
+            }
+            .input-display {
+                font-size: 1.2em;
+                padding: 5px 10px;
+                letter-spacing: 5px;
+            }
+            .amino-acid {
+                font-size: 0.9em;
+                padding: 6px 10px;
+            }
+            .hint {
+                font-size: 0.7em;
+                padding: 3px 6px;
+            }
+        }
+        
+        @media (max-height: 400px) {
+            h1 {
+                font-size: 1.2em;
+            }
+            .title-button {
+                margin-right: -1px;
+            }
+            .game-area {
+                min-height: 30vh;
+            }
+            .keypad {
+                gap: 4px;
+                padding: 4px;
+            }
+            .key {
+                font-size: 1.1em;
+            }
+            .clear-btn {
+                font-size: 0.8em;
+            }
+            .input-display {
+                font-size: 1.1em;
+                padding: 4px 8px;
+                letter-spacing: 4px;
+            }
+            .amino-acid {
+                font-size: 0.8em;
+                padding: 5px 8px;
+            }
+            .hint {
+                font-size: 0.6em;
+                padding: 2px 5px;
+            }
+            .score-board {
+                font-size: 0.7em;
+                gap: 8px;
+            }
+            .score-value {
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>
             <span class="title-button">T</span>
-			<span class="title-part">he</span>
+            <span class="title-part">he</span>
             <span class="title-button">C</span>
             <span class="title-part">odon</span>
             <span class="title-button">G</span>
@@ -287,28 +479,34 @@
             </div>
         </div>
     </header>
-
     <main>
         <section class="game-area" id="gameArea">
             <div class="hint" id="hint">Type the codon!</div>
             <div class="input-display" id="inputDisplay">---</div>
         </section>
-
         <section class="keypad">
             <button class="key" data-key="A">A</button>
             <button class="key" data-key="C">C</button>
             <button class="key" data-key="G">G</button>
-            <button class="key" data-key="T">T</button>
+            <button class="key" data-key="U">U</button>
             <button class="key clear-btn" id="clearBtn">Clear</button>
         </section>
     </main>
-
+    <footer>
+        <div class="social-icons">
+            <a href="https://fb.bioinfo.guru" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://tw.bioinfo.guru" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://ig.bioinfo.guru" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.bioinfo.guru" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://li.bioinfo.guru" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="bsky.app/profile/bioinfoguru.bsky.social" class="social-icon"><i class="fa-brands fa-bluesky"></i></a>
+        </div>
+    </footer>
     <div class="game-over" id="gameOver">
         <h2>Game Over!</h2>
         <p>Final Score: <span id="finalScore">0</span></p>
         <button class="restart-btn" onclick="restartGame()">Play Again</button>
     </div>
-
     <script>
         // Audio context for popping sound
         let audioContext = null;
@@ -351,44 +549,40 @@
                 console.log('Audio playback failed:', e);
             }
         }
-
-        // Amino acid to codon mapping
+        // Amino acid to RNA codon mapping
         const aminoAcidCodons = {
-            'Alanine': ['GCT', 'GCC', 'GCA', 'GCG'],
-            'Arginine': ['CGT', 'CGC', 'CGA', 'CGG', 'AGA', 'AGG'],
-            'Asparagine': ['AAT', 'AAC'],
-            'Aspartic acid': ['GAT', 'GAC'],
-            'Cysteine': ['TGT', 'TGC'],
-            'Glutamic acid': ['GAA', 'GAG'],
+            'Phenylalanine': ['UUU', 'UUC'],
+            'Leucine': ['UUA', 'UUG', 'CUU', 'CUC', 'CUA', 'CUG'],
+            'Serine': ['UCU', 'UCC', 'UCA', 'UCG', 'AGU', 'AGC'],
+            'Tyrosine': ['UAU', 'UAC'],
+            'Stop': ['UAA', 'UAG', 'UGA'],
+            'Cysteine': ['UGU', 'UGC'],
+            'Tryptophan': ['UGG'],
+            'Proline': ['CCU', 'CCC', 'CCA', 'CCG'],
+            'Histidine': ['CAU', 'CAC'],
             'Glutamine': ['CAA', 'CAG'],
-            'Glycine': ['GGT', 'GGC', 'GGA', 'GGG'],
-            'Histidine': ['CAT', 'CAC'],
-            'Isoleucine': ['ATT', 'ATC', 'ATA'],
-            'Leucine': ['TTA', 'TTG', 'CTT', 'CTC', 'CTA', 'CTG'],
+            'Arginine': ['CGU', 'CGC', 'CGA', 'CGG', 'AGA', 'AGG'],
+            'Isoleucine': ['AUU', 'AUC', 'AUA'],
+            'Threonine': ['ACU', 'ACC', 'ACA', 'ACG'],
+            'Asparagine': ['AAU', 'AAC'],
             'Lysine': ['AAA', 'AAG'],
-            'Methionine': ['ATG'],
-            'Phenylalanine': ['TTT', 'TTC'],
-            'Proline': ['CCT', 'CCC', 'CCA', 'CCG'],
-            'Serine': ['TCT', 'TCC', 'TCA', 'TCG', 'AGT', 'AGC'],
-            'Threonine': ['ACT', 'ACC', 'ACA', 'ACG'],
-            'Tryptophan': ['TGG'],
-            'Tyrosine': ['TAT', 'TAC'],
-            'Valine': ['GTT', 'GTC', 'GTA', 'GTG'],
-            'Stop': ['TAA', 'TAG', 'TGA']
+            'Valine': ['GUU', 'GUC', 'GUA', 'GUG'],
+            'Alanine': ['GCU', 'GCC', 'GCA', 'GCG'],
+            'Aspartic acid': ['GAU', 'GAC'],
+            'Glutamic acid': ['GAA', 'GAG'],
+            'Glycine': ['GGU', 'GGC', 'GGA', 'GGG']
         };
-
         // Game state
         let score = 0;
         let combo = 0;
         let speed = 1;
         let currentAminoAcid = null;
-        let correctCodon = '';
+        let correctCodons = []; // Store all valid codons for current amino acid
         let currentCodon = '';
         let gameRunning = true;
         let fallingInterval = null;
         let aminoAcidElement = null;
         let isBursting = false; // Flag to prevent multiple bursts
-
         // DOM elements
         const gameArea = document.getElementById('gameArea');
         const inputDisplay = document.getElementById('inputDisplay');
@@ -398,17 +592,114 @@
         const hintElement = document.getElementById('hint');
         const gameOverScreen = document.getElementById('gameOver');
         const finalScoreElement = document.getElementById('finalScore');
-
+        
+        // Function to adjust game area size
+        function adjustGameAreaSize() {
+            if (!gameArea) return;
+            
+            // Calculate available space for the game area
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const keypadHeight = document.querySelector('.keypad').offsetHeight;
+            const footerHeight = document.querySelector('footer').offsetHeight;
+            const padding = 20; // 10px top + 10px bottom
+            
+            const availableHeight = window.innerHeight - headerHeight - keypadHeight - footerHeight - padding;
+            gameArea.style.minHeight = `${Math.max(availableHeight, window.innerHeight * 0.35)}px`;
+            
+            // Adjust amino acid position if it exists
+            if (aminoAcidElement && aminoAcidElement.style.top) {
+                const currentTop = parseInt(aminoAcidElement.style.top);
+                if (currentTop > availableHeight - 50) {
+                    aminoAcidElement.style.top = `${availableHeight - 50}px`;
+                }
+            }
+        }
+        
+        // Function to adjust keypad buttons based on window height
+        function adjustKeypadButtons() {
+            const keys = document.querySelectorAll('.key:not(.clear-btn)');
+            const clearBtn = document.querySelector('.clear-btn');
+            
+            // Calculate button size based on window height
+            let windowHeight = window.innerHeight;
+            
+            if (windowHeight < 400) {
+                // Very small screens
+                keys.forEach(key => {
+                    key.style.minHeight = '25px';
+                    key.style.fontSize = '1.1em';
+                });
+                clearBtn.style.fontSize = '0.8em';
+            } else if (windowHeight < 500) {
+                // Small screens
+                keys.forEach(key => {
+                    key.style.minHeight = '30px';
+                    key.style.fontSize = '1.2em';
+                });
+                clearBtn.style.fontSize = '0.9em';
+            } else if (windowHeight < 600) {
+                // Medium screens
+                keys.forEach(key => {
+                    key.style.minHeight = '35px';
+                    key.style.fontSize = '1.3em';
+                });
+                clearBtn.style.fontSize = '1em';
+            } else {
+                // Default size
+                keys.forEach(key => {
+                    key.style.minHeight = '40px';
+                    key.style.fontSize = '1.5em';
+                });
+                clearBtn.style.fontSize = '1em';
+            }
+        }
+        
+        // Function to adjust speed based on game area height
+        function adjustSpeedBasedOnGameArea() {
+            if (!gameArea) return;
+            
+            const gameAreaHeight = gameArea.offsetHeight;
+            const windowHeight = window.innerHeight;
+            
+            // Calculate speed multiplier based on game area height relative to window height
+            const heightRatio = gameAreaHeight / windowHeight;
+            
+            // Base speed adjusted by height ratio
+            // Smaller game areas should have proportionally slower falling speed
+            const adjustedSpeed = Math.max(0.5, speed * heightRatio);
+            
+            return adjustedSpeed;
+        }
+        
+        // Function to start falling with specific speed
+        function startFallingWithSpeed(gameSpeed) {
+            let position = 0;
+            fallingInterval = setInterval(() => {
+                if (!gameRunning || !aminoAcidElement || isBursting) return;
+                
+                position += 2 * gameSpeed;
+                aminoAcidElement.style.top = position + 'px';
+                
+                if (position > gameArea.offsetHeight - 50) {
+                    gameOver();
+                }
+            }, 50);
+        }
+        
         // Initialize game
         function startGame() {
             // Clear codon at start
             currentCodon = '';
             updateInputDisplay();
             
+            // Adjust game area size
+            adjustGameAreaSize();
+            
+            // Adjust keypad buttons
+            adjustKeypadButtons();
+            
             spawnNewAminoAcid();
-            startFalling();
         }
-
         // Spawn new amino acid
         function spawnNewAminoAcid() {
             // Clear any existing falling interval
@@ -417,10 +708,21 @@
                 fallingInterval = null;
             }
             
+            // Reset burst flag to ensure new amino acid can burst
+            isBursting = false;
+            
+            // Get all amino acids
             const aminoAcids = Object.keys(aminoAcidCodons);
-            currentAminoAcid = aminoAcids[Math.floor(Math.random() * aminoAcids.length)];
-            const codons = aminoAcidCodons[currentAminoAcid];
-            correctCodon = codons[Math.floor(Math.random() * codons.length)];
+            
+            // Filter out stop codons for gameplay
+            const nonStopAminoAcids = aminoAcids.filter(aa => aa !== 'Stop');
+            currentAminoAcid = nonStopAminoAcids[Math.floor(Math.random() * nonStopAminoAcids.length)];
+            
+            // Get all codons for this amino acid
+            correctCodons = aminoAcidCodons[currentAminoAcid];
+            
+            // Select a random codon for this amino acid (for display purposes)
+            const randomCodon = correctCodons[Math.floor(Math.random() * correctCodons.length)];
             
             if (aminoAcidElement) {
                 aminoAcidElement.remove();
@@ -429,31 +731,25 @@
             aminoAcidElement = document.createElement('div');
             aminoAcidElement.className = 'amino-acid';
             aminoAcidElement.textContent = currentAminoAcid;
-            aminoAcidElement.style.left = Math.random() * (gameArea.offsetWidth - 150) + 'px';
+            
+            // Position the amino acid within the game area
+            const maxLeft = Math.max(gameArea.offsetWidth - 120, 0);
+            aminoAcidElement.style.left = Math.random() * maxLeft + 'px';
             aminoAcidElement.style.top = '0px';
+            
             gameArea.appendChild(aminoAcidElement);
             
-            hintElement.textContent = `Type the codon for ${currentAminoAcid}`;
+            hintElement.textContent = `Type the RNA codon for ${currentAminoAcid}`;
             
-            // Reset burst flag
-            isBursting = false;
+            // Start falling with adjusted speed
+            const adjustedSpeed = adjustSpeedBasedOnGameArea();
+            startFallingWithSpeed(adjustedSpeed);
         }
-
         // Start falling animation
         function startFalling() {
-            let position = 0;
-            fallingInterval = setInterval(() => {
-                if (!gameRunning || !aminoAcidElement || isBursting) return;
-                
-                position += 2 * speed;
-                aminoAcidElement.style.top = position + 'px';
-                
-                if (position > gameArea.offsetHeight - 60) {
-                    gameOver();
-                }
-            }, 50);
+            const adjustedSpeed = adjustSpeedBasedOnGameArea();
+            startFallingWithSpeed(adjustedSpeed);
         }
-
         // Handle key press
         document.querySelectorAll('.key[data-key]').forEach(key => {
             key.addEventListener('click', () => {
@@ -468,7 +764,6 @@
                 }
             });
         });
-
         // Clear button
         document.getElementById('clearBtn').addEventListener('click', () => {
             if (!isBursting) {
@@ -476,12 +771,11 @@
                 updateInputDisplay();
             }
         });
-
         // Keyboard support
         document.addEventListener('keydown', (e) => {
             if (!gameRunning || isBursting) return;
             
-            if (['A', 'C', 'G', 'T'].includes(e.key.toUpperCase())) {
+            if (['A', 'C', 'G', 'U'].includes(e.key.toUpperCase())) {
                 if (currentCodon.length < 3) {
                     currentCodon += e.key.toUpperCase();
                     updateInputDisplay();
@@ -499,7 +793,6 @@
                 updateInputDisplay();
             }
         });
-
         // Update input display
         function updateInputDisplay() {
             let display = currentCodon;
@@ -508,13 +801,12 @@
             }
             inputDisplay.textContent = display;
         }
-
         // Check answer
         function checkAnswer() {
             if (currentCodon.length !== 3 || isBursting) return;
             
             // Check if the entered codon is in the list of valid codons for the current amino acid
-            if (aminoAcidCodons[currentAminoAcid].includes(currentCodon)) {
+            if (correctCodons.includes(currentCodon)) {
                 // Correct answer
                 combo++;
                 score += 10 * combo;
@@ -539,7 +831,6 @@
                     spawnNewAminoAcid();
                     currentCodon = '';
                     updateInputDisplay();
-                    startFalling();
                 }, 600);
             } else {
                 // Wrong answer - clear the codon
@@ -553,7 +844,6 @@
                 }, 500);
             }
         }
-
         // Create burst effect with sound
         function createBurstEffect() {
             if (!aminoAcidElement) return;
@@ -577,12 +867,10 @@
                 setTimeout(() => particle.remove(), 500);
             }
         }
-
         // Update score display
         function updateScore() {
             scoreElement.textContent = score;
         }
-
         // Game over - clear the codon
         function gameOver() {
             gameRunning = false;
@@ -593,7 +881,6 @@
             finalScoreElement.textContent = score;
             gameOverScreen.style.display = 'block';
         }
-
         // Restart game - clear the codon
         function restartGame() {
             score = 0;
@@ -606,10 +893,28 @@
             speedElement.textContent = '1.0x';
             gameOverScreen.style.display = 'none';
             updateInputDisplay();
+            
+            // Clear any existing falling interval
+            if (fallingInterval) {
+                clearInterval(fallingInterval);
+                fallingInterval = null;
+            }
+            
+            // Clear any existing amino acid
+            if (aminoAcidElement) {
+                aminoAcidElement.remove();
+                aminoAcidElement = null;
+            }
+            
+            // Adjust game area size before restarting
+            adjustGameAreaSize();
+            
+            // Adjust keypad buttons
+            adjustKeypadButtons();
+            
+            // Spawn new amino acid and start falling
             spawnNewAminoAcid();
-            startFalling();
         }
-
         // Add shake animation
         const style = document.createElement('style');
         style.textContent = `
@@ -620,9 +925,24 @@
             }
         `;
         document.head.appendChild(style);
-
+        
         // Initialize the game when the page loads
-        window.addEventListener('load', startGame);
+        window.addEventListener('load', () => {
+            startGame();
+            
+            // Add resize event listener to adjust game area size and keypad buttons
+            window.addEventListener('resize', () => {
+                adjustGameAreaSize();
+                adjustKeypadButtons();
+                
+                // Adjust falling speed if game is running
+                if (gameRunning && fallingInterval) {
+                    const adjustedSpeed = adjustSpeedBasedOnGameArea();
+                    clearInterval(fallingInterval);
+                    startFallingWithSpeed(adjustedSpeed);
+                }
+            });
+        });
         
         // Initialize audio on first user interaction
         document.addEventListener('click', initAudio, { once: true });
