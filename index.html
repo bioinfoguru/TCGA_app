@@ -18,7 +18,7 @@
             display: flex;
             flex-direction: column;
             color: white;
-            overflow-x: hidden; /* Only hide horizontal overflow */
+            overflow: hidden;
         }
         header {
             padding: 10px;
@@ -320,7 +320,7 @@
                 gap: 10px;
             }
             .game-area {
-                min-height: 40vh;
+                min-height: 35vh;
             }
             .amino-acid {
                 font-size: 1em;
@@ -372,7 +372,7 @@
                 gap: 10px;
             }
             .game-area {
-                min-height: 40vh;
+                min-height: 35vh;
             }
             .input-display {
                 font-size: 1.3em;
@@ -414,7 +414,7 @@
                 margin-right: -2px;
             }
             .game-area {
-                min-height: 35vh;
+                min-height: 30vh;
             }
             .keypad {
                 gap: 5px;
@@ -450,7 +450,7 @@
                 margin-right: -1px;
             }
             .game-area {
-                min-height: 30vh;
+                min-height: 25vh;
             }
             .keypad {
                 gap: 4px;
@@ -635,18 +635,33 @@
             const headerHeight = header ? header.offsetHeight : 0;
             const keypadHeight = keypad ? keypad.offsetHeight : 0;
             const footerHeight = footer ? footer.offsetHeight : 0;
-            const padding = 20;
             
+            // Calculate available space for the game area
+            // Use a fixed padding instead of percentage to ensure footer is always visible
+            const padding = 15;
             const availableHeight = window.innerHeight - headerHeight - keypadHeight - footerHeight - padding;
-            const minHeight = Math.max(availableHeight * 0.6, 200); // Ensure minimum usable height
             
-            gameArea.style.minHeight = `${minHeight}px`;
+            // Set a minimum height for the game area based on screen size
+            let minHeight;
+            if (window.innerHeight < 500) {
+                minHeight = 200; // Very small screens
+            } else if (window.innerHeight < 600) {
+                minHeight = 250; // Small screens
+            } else if (window.innerHeight < 768) {
+                minHeight = 300; // Tablets
+            } else {
+                minHeight = 350; // Desktop
+            }
+            
+            // Use the larger of the calculated available height or the minimum height
+            const finalHeight = Math.max(availableHeight, minHeight);
+            gameArea.style.minHeight = `${finalHeight}px`;
             
             // Adjust amino acid position if it exists
             if (aminoAcidElement && aminoAcidElement.style.top) {
                 const currentTop = parseInt(aminoAcidElement.style.top);
-                if (currentTop > minHeight - 50) {
-                    aminoAcidElement.style.top = `${minHeight - 50}px`;
+                if (currentTop > finalHeight - 50) {
+                    aminoAcidElement.style.top = `${finalHeight - 50}px`;
                 }
             }
         }
