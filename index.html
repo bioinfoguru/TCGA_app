@@ -18,7 +18,7 @@
             display: flex;
             flex-direction: column;
             color: white;
-            overflow: hidden;
+            overflow-x: hidden; /* Only hide horizontal overflow */
         }
         header {
             padding: 10px;
@@ -71,7 +71,7 @@
             color: #ffd700;
         }
         main {
-            flex: 1;
+            flex: 1 0 auto; /* Allow shrinking but not below content size */
             display: flex;
             flex-direction: column;
             width: 100%;
@@ -79,6 +79,7 @@
             margin: 0 auto;
             padding: 5px;
             overflow: hidden;
+            min-height: 0; /* Allow flex items to shrink below content size */
         }
         .game-area {
             flex: 1;
@@ -89,7 +90,6 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.2);
             margin-bottom: 10px;
-            min-height: 40vh;
             width: 100%;
         }
         .amino-acid {
@@ -251,13 +251,13 @@
             padding: 8px;
             text-align: center;
             width: 100%;
-//            background: rgba(0, 0, 0, 0.2);
+            /* background: rgba(0, 0, 0, 0.2); */
             backdrop-filter: blur(10px);
             flex-shrink: 0;
-		    height: auto;
-			min-height: 40px;
-			order: 3;
-}
+            height: auto;
+            min-height: 40px;
+            order: 3;
+            box-sizing: border-box;
         }
         .social-icons {
             display: flex;
@@ -300,6 +300,10 @@
             }
             h1 {
                 font-size: 1.6em;
+            }
+            footer {
+                padding: 6px;
+                min-height: 35px;
             }
         }
         
@@ -393,6 +397,7 @@
             }
             footer {
                 padding: 6px;
+                min-height: 35px;
             }
             .social-icon {
                 width: 22px;
@@ -622,20 +627,26 @@
         function adjustGameAreaSize() {
             if (!gameArea) return;
             
-            // Calculate available space for the game area
-            const headerHeight = document.querySelector('header').offsetHeight;
-            const keypadHeight = document.querySelector('.keypad').offsetHeight;
-            const footerHeight = document.querySelector('footer').offsetHeight;
-            const padding = 20; // 10px top + 10px bottom
+            const header = document.querySelector('header');
+            const keypad = document.querySelector('.keypad');
+            const footer = document.querySelector('footer');
+            
+            // Ensure elements exist before getting their heights
+            const headerHeight = header ? header.offsetHeight : 0;
+            const keypadHeight = keypad ? keypad.offsetHeight : 0;
+            const footerHeight = footer ? footer.offsetHeight : 0;
+            const padding = 20;
             
             const availableHeight = window.innerHeight - headerHeight - keypadHeight - footerHeight - padding;
-            gameArea.style.minHeight = `${Math.max(availableHeight, window.innerHeight * 0.35)}px`;
+            const minHeight = Math.max(availableHeight * 0.6, 200); // Ensure minimum usable height
+            
+            gameArea.style.minHeight = `${minHeight}px`;
             
             // Adjust amino acid position if it exists
             if (aminoAcidElement && aminoAcidElement.style.top) {
                 const currentTop = parseInt(aminoAcidElement.style.top);
-                if (currentTop > availableHeight - 50) {
-                    aminoAcidElement.style.top = `${availableHeight - 50}px`;
+                if (currentTop > minHeight - 50) {
+                    aminoAcidElement.style.top = `${minHeight - 50}px`;
                 }
             }
         }
