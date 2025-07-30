@@ -281,7 +281,24 @@
             transform: translateY(-3px);
         }
         
-        /* Responsive adjustments */
+        /* Mobile-first approach - smaller screens by default */
+        @media (max-width: 768px) {
+            .key {
+                font-size: 1.3em;
+                min-height: 35px;
+            }
+            .clear-btn {
+                font-size: 0.9em;
+            }
+            .score-board {
+                font-size: 0.8em;
+                gap: 10px;
+            }
+            h1 {
+                font-size: 1.6em;
+            }
+        }
+        
         @media (max-width: 480px) {
             h1 {
                 font-size: 1.5em;
@@ -308,10 +325,11 @@
                 min-width: 120px;
             }
             .key {
-                font-size: 1.3em;
+                font-size: 1.2em;
+                min-height: 30px;
             }
             .clear-btn {
-                font-size: 0.9em;
+                font-size: 0.8em;
             }
             .hint {
                 font-size: 0.8em;
@@ -359,10 +377,11 @@
                 padding: 6px;
             }
             .key {
-                font-size: 1.3em;
+                font-size: 1.2em;
+                min-height: 30px;
             }
             .clear-btn {
-                font-size: 1em;
+                font-size: 0.9em;
             }
             .hint {
                 font-size: 0.8em;
@@ -393,10 +412,11 @@
                 padding: 5px;
             }
             .key {
-                font-size: 1.2em;
+                font-size: 1.1em;
+                min-height: 25px;
             }
             .clear-btn {
-                font-size: 0.9em;
+                font-size: 0.8em;
             }
             .input-display {
                 font-size: 1.2em;
@@ -428,10 +448,11 @@
                 padding: 4px;
             }
             .key {
-                font-size: 1.1em;
+                font-size: 1em;
+                min-height: 20px;
             }
             .clear-btn {
-                font-size: 0.8em;
+                font-size: 0.7em;
             }
             .input-display {
                 font-size: 1.1em;
@@ -626,26 +647,33 @@
             if (windowHeight < 400) {
                 // Very small screens
                 keys.forEach(key => {
+                    key.style.minHeight = '20px';
+                    key.style.fontSize = '1em';
+                });
+                clearBtn.style.fontSize = '0.7em';
+            } else if (windowHeight < 500) {
+                // Small screens
+                keys.forEach(key => {
                     key.style.minHeight = '25px';
                     key.style.fontSize = '1.1em';
                 });
                 clearBtn.style.fontSize = '0.8em';
-            } else if (windowHeight < 500) {
-                // Small screens
+            } else if (windowHeight < 600) {
+                // Medium screens
                 keys.forEach(key => {
                     key.style.minHeight = '30px';
                     key.style.fontSize = '1.2em';
                 });
                 clearBtn.style.fontSize = '0.9em';
-            } else if (windowHeight < 600) {
-                // Medium screens
+            } else if (windowHeight < 768) {
+                // Tablets
                 keys.forEach(key => {
                     key.style.minHeight = '35px';
                     key.style.fontSize = '1.3em';
                 });
-                clearBtn.style.fontSize = '1em';
+                clearBtn.style.fontSize = '0.9em';
             } else {
-                // Default size
+                // Default size for desktop
                 keys.forEach(key => {
                     key.style.minHeight = '40px';
                     key.style.fontSize = '1.5em';
